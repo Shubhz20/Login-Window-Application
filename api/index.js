@@ -1,7 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -28,7 +30,7 @@ const connectDB = async () => {
     console.log('Connected to MongoDB Atlas');
   } else if (!process.env.VERCEL) {
     // Only use memory server locally
-    const { MongoMemoryServer } = require('mongodb-memory-server');
+    const { MongoMemoryServer } = await import('mongodb-memory-server');
     const mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
     isConnected = true;
@@ -77,4 +79,4 @@ if (!process.env.VERCEL) {
 }
 
 // Export the Express app for Vercel
-module.exports = app;
+export default app;
