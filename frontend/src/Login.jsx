@@ -13,7 +13,7 @@ function Login() {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5001/api/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
