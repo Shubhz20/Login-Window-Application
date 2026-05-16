@@ -69,6 +69,27 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Signup Endpoint
+app.post('/api/signup', async (req, res) => {
+  await connectDB();
+  const { email, password } = req.body;
+
+  if (process.env.VERCEL && !process.env.MONGODB_URI) {
+    return res.status(400).json({ message: 'Signup is disabled on Vercel demo without a real MONGODB_URI.' });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+    const newUser = await User.create({ email, password });
+    res.status(201).json({ message: 'Signup successful! You can now log in.', user: { email: newUser.email } });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Only start the server if we're not on Vercel
 if (!process.env.VERCEL) {
   connectDB().then(() => {
